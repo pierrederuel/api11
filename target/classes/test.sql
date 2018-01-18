@@ -1,0 +1,1 @@
+select SUM(c.montant) from commission c where c.commercial_id = 16
