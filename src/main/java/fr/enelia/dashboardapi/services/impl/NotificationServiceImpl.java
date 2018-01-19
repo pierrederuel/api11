@@ -66,7 +66,7 @@ public class NotificationServiceImpl implements NotificationService {
                     body.put("data", data);
 
                     HttpEntity<String> entity = new HttpEntity<>(body.toString());
-/*
+
                     FirebaseResponse firebaseResponse = restTemplate.postForObject("https://fcm.googleapis.com/fcm/send", entity, FirebaseResponse.class);
                     CompletableFuture<FirebaseResponse> pushNotification = CompletableFuture.completedFuture(firebaseResponse);
                     CompletableFuture.allOf(pushNotification).join();
@@ -83,7 +83,7 @@ public class NotificationServiceImpl implements NotificationService {
                         e.printStackTrace();
                     } catch (ExecutionException e) {
                         e.printStackTrace();
-                    }*/
+                    }
                 }
             }
         }
