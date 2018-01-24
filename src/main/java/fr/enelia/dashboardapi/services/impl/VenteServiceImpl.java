@@ -42,35 +42,41 @@ public class VenteServiceImpl implements VenteService {
         StatistiquesAnnuelles statistiquesAnnuelles = null;
 
         if (vente.getCommerciaux() != null && vente.getCommerciaux().size() > 0) {
+            if (vente.getCommerciaux().size() > 1 && vente.getCommerciaux().get(1) == null) {
+                vente.getCommerciaux().remove(1);
+            }
+
             List<Commission> commissions = new ArrayList<Commission>();
             //Gestion du cas plusieurs commerciaux, division de la commission
             double montantDivise = vente.getVente().getMontantTotal();
-            if (vente.getCommerciaux().size() > 1) {
+            if (vente.getCommerciaux().size() > 1 && vente.getCommerciaux().get(1) != null) {
                 montantDivise = vente.getVente().getMontantTotal() / vente.getCommerciaux().size();
             }
             for (int i = 0; i < vente.getCommerciaux().size(); i++) {
-                Commission commission = new Commission();
-                Commercial commercial = commercialService.getCommercialById(vente.getCommerciaux().get(i).getId());
-                if (commercial.getId() == 0) {
-                    commercial = commercialService.getCommercialByNomAndPrenom(commercial.getNom(), commercial.getPrenom());
-                }
-                commission.setCommercial(commercial);
-                commission.setMontant(montantDivise);
-                commission.setPeriode(periodeService.getLatestPeriode());
-                commission.setVente(vente.getVente());
-                commissions.add(commission);
-                //On gère les stats pour chaque commercial
-                statistiquesMensuelles = statistiquesMensuellesService.getStatistiquesMensuellesByUserIdAndPeriode(commercial.getId(), commission.getPeriode());
-                statistiquesMensuelles.setCaTotal(statistiquesMensuelles.getCaTotal() + montantDivise);
-                statistiquesMensuelles.setCaReel(statistiquesMensuelles.getCaReel() + montantDivise);
-                statistiquesMensuelles.setNbVentes(statistiquesMensuelles.getNbVentes()+1);
-                statistiquesMensuellesService.updateStatistiquesMensuelles(statistiquesMensuelles);
+                if (vente.getCommerciaux().get(i) != null) {
+                    Commission commission = new Commission();
+                    Commercial commercial = commercialService.getCommercialById(vente.getCommerciaux().get(i).getId());
+                    if (commercial.getId() == 0) {
+                        commercial = commercialService.getCommercialByNomAndPrenom(commercial.getNom(), commercial.getPrenom());
+                    }
+                    commission.setCommercial(commercial);
+                    commission.setMontant(montantDivise);
+                    commission.setPeriode(periodeService.getLatestPeriode());
+                    commission.setVente(vente.getVente());
+                    commissions.add(commission);
+                    //On gère les stats pour chaque commercial
+                    statistiquesMensuelles = statistiquesMensuellesService.getStatistiquesMensuellesByUserIdAndPeriode(commercial.getId(), commission.getPeriode());
+                    statistiquesMensuelles.setCaTotal(statistiquesMensuelles.getCaTotal() + montantDivise);
+                    statistiquesMensuelles.setCaReel(statistiquesMensuelles.getCaReel() + montantDivise);
+                    statistiquesMensuelles.setNbVentes(statistiquesMensuelles.getNbVentes() + 1);
+                    statistiquesMensuellesService.updateStatistiquesMensuelles(statistiquesMensuelles);
 
-                statistiquesAnnuelles = statistiquesAnnuellesService.getStatistiquesAnnuellesByUserIdAndPeriode(commercial.getId(), commission.getPeriode());
-                statistiquesAnnuelles.setCaTotal(statistiquesAnnuelles.getCaTotal() + montantDivise);
-                statistiquesAnnuelles.setCaReel(statistiquesAnnuelles.getCaReel() + montantDivise);
-                statistiquesAnnuelles.setNbVentes(statistiquesAnnuelles.getNbVentes()+1);
-                statistiquesAnnuellesService.updateStatistiquesAnnuelles(statistiquesAnnuelles);
+                    statistiquesAnnuelles = statistiquesAnnuellesService.getStatistiquesAnnuellesByUserIdAndPeriode(commercial.getId(), commission.getPeriode());
+                    statistiquesAnnuelles.setCaTotal(statistiquesAnnuelles.getCaTotal() + montantDivise);
+                    statistiquesAnnuelles.setCaReel(statistiquesAnnuelles.getCaReel() + montantDivise);
+                    statistiquesAnnuelles.setNbVentes(statistiquesAnnuelles.getNbVentes() + 1);
+                    statistiquesAnnuellesService.updateStatistiquesAnnuelles(statistiquesAnnuelles);
+                }
             }
             vente.getVente().setCommisions(commissions);
         }
