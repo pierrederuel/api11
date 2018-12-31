@@ -43,8 +43,8 @@ public class StatistiquesAnnuellesServiceImpl implements StatistiquesAnnuellesSe
 
     @Override
     public StatistiquesAnnuelles getStatistiquesAnnuellesByUserIdAndPeriode(Long id, Periode periode) {
-        LOGGER.info("getStatistiquesAnnuellesByUserIdAndPeriode");
         Employe employe = employeRepository.findOne(id);
-        return statistiquesAnnuellesRepository.getStatsAnnuellesByEmploye(employe);
+        Iterator<StatistiquesAnnuelles> itStats = statistiquesAnnuellesRepository.getStatsAnnuellesByEmployeOrderByIdDesc(employe).iterator();
+        return itStats.next();
     }
 }
