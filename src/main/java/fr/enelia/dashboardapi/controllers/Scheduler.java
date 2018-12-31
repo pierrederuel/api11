@@ -93,7 +93,11 @@ public class Scheduler {
             }
         }
     }
-
+    
+    @GetMapping(value = "version")
+    public String getVersion() {
+        return "20181231";
+    }
 
 
     @Scheduled(cron="0 0 0 1 1/1 *") //Chaque 1er du mois à 00h01, on crée la nouvelle période
