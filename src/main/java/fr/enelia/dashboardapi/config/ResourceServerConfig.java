@@ -12,6 +12,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers("/oauth/token/**").permitAll()
+                .antMatchers("/version").permitAll()
                 .antMatchers("/init-data").permitAll()
                 .antMatchers("/init-new-periode").permitAll()
                 .antMatchers("/tokens").permitAll()
