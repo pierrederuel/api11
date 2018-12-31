@@ -8,5 +8,5 @@ import org.springframework.data.repository.CrudRepository;
 public interface StatistiquesAnnuellesRepository extends CrudRepository<StatistiquesAnnuelles, Long> {
     Iterable<StatistiquesAnnuelles> getStatistiquesAnnuellesByEmploye(Employe employe);
     StatistiquesAnnuelles getStatistiquesAnnuellesByEmployeAndPeriode(Employe employe, Periode periode);
-    StatistiquesAnnuelles getStatsAnnuellesByEmploye(Employe employe);
+    Iterable<StatistiquesAnnuelles> getStatsAnnuellesByEmployeOrderByIdDesc(Employe employe);
 }
